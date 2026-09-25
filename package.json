@@ -1,0 +1,26 @@
+{
+  "name": "savings-tracker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently -n \"SERVER,CLIENT\" -c \"cyan,magenta\" \"npm run dev --prefix server\" \"npm run dev --prefix client\"",
+    "build": "npm run build --prefix server && npm run build --prefix client",
+    "start": "npm run start --prefix server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://vamshiambaripeta@github.com/vamshiambaripeta/savings-tracker.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/vamshiambaripeta/savings-tracker/issues"
+  },
+  "homepage": "https://github.com/vamshiambaripeta/savings-tracker#readme",
+  "devDependencies": {
+    "concurrently": "^10.0.5"
+  }
+}

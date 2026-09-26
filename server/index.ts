@@ -4,6 +4,7 @@ import { google } from 'googleapis';
 import fs from 'fs';
 import path from 'path';
 import dotenv from 'dotenv';
+import { fileURLToPath } from 'url';
 
 dotenv.config();
 
@@ -19,6 +20,8 @@ app.use(cors({
 app.use(express.json());
 
 const SPREADSHEET_ID = process.env.SPREADSHEET_ID || '';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Determine whether to use Render's Secret File path or local file path
 const renderSecretPath = '/etc/secrets/credentials.json';

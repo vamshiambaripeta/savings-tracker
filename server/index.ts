@@ -1,23 +1,35 @@
 import express, { type Request, type Response } from 'express';
 import cors from 'cors';
 import { google } from 'googleapis';
+import fs from 'fs';
+import path from 'path';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
 const app = express();
+
 app.use(cors({
   origin: [
     'http://localhost:5173',
     'https://priyamshi.onrender.com'
   ]
 }));
+
 app.use(express.json());
 
 const SPREADSHEET_ID = process.env.SPREADSHEET_ID || '';
 
+// Determine whether to use Render's Secret File path or local file path
+const renderSecretPath = '/etc/secrets/credentials.json';
+const localSecretPath = path.join(__dirname, 'credentials.json');
+
+const keyFilePath = fs.existsSync(renderSecretPath)
+  ? renderSecretPath
+  : localSecretPath;
+
 const auth = new google.auth.GoogleAuth({
-  keyFile: 'credentials.json',
+  keyFile: keyFilePath,
   scopes: ['https://www.googleapis.com/auth/spreadsheets']
 });
 

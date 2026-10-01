@@ -27,11 +27,12 @@ export const fetchNetWorthEntries = async (): Promise<NetWorthDataResponse> => {
     };
   }
 
-  // Parse Summary/Final Box (Top right: Columns Z & AA, Rows 2-4 -> Array indices 25 & 26)
+  // Parse Summary/Final Box
+  // Note: When a new column is added, this needs updating
   const summary: NetWorthBreakdown = {
-    cash: parseCurrency(rawRows[1]?.[26]),
-    iras: parseCurrency(rawRows[2]?.[26]),
-    total: parseCurrency(rawRows[3]?.[26]),
+    cash: parseCurrency(rawRows[1]?.[27]),
+    iras: parseCurrency(rawRows[2]?.[27]),
+    total: parseCurrency(rawRows[3]?.[27]),
   };
 
   let currentYear = 2025;
@@ -41,26 +42,26 @@ export const fetchNetWorthEntries = async (): Promise<NetWorthDataResponse> => {
     const sheetRowNumber = index + 1;
 
     const colA = row[0] ? row[0].trim() : '';   // Column A: Month/Year label
-    const colV = row[21] ? row[21].trim() : ''; // Column V: Month name (e.g., "January 2025", "February")
-    const colW = row[22] ? row[22].trim() : ''; // Column W: Net Worth value
+    const colW = row[22] ? row[22].trim() : ''; // Column W: Month name
+    const colX = row[23] ? row[23].trim() : ''; // Column X: Net Worth value
 
-    // Track active year from Column V or Column A
-    const yearMatch = (colV || colA).match(/\b(20\d{2})\b/);
+    // Track active year from Column W or Column A
+    const yearMatch = (colW || colA).match(/\b(20\d{2})\b/);
     if (yearMatch) {
       currentYear = parseInt(yearMatch[1], 10);
     }
 
-    const netWorthVal = parseCurrency(colW);
-    const dollarChg = parseCurrency(row[23]); // Column X: $ Change
-    const percentChg = row[24]?.trim() || ''; // Column Y: % Change
+    const netWorthVal = parseCurrency(colX);
+    const dollarChg = parseCurrency(row[24]); // Column Y: $ Change
+    const percentChg = row[25]?.trim() || ''; // Column Z: % Change
 
     // Skip header rows or empty rows
-    if (colV.toLowerCase().includes('monthly networth') || colA.toLowerCase().includes('monthly networth')) {
+    if (colW.toLowerCase().includes('monthly networth') || colA.toLowerCase().includes('monthly networth')) {
       return;
     }
 
-    const monthLabel = colV || colA;
-    const isEOY = colV.includes('EOY') || colA.includes('EOY') || (sheetRowNumber > 5 && !colV && netWorthVal > 0 && dollarChg !== 0);
+    const monthLabel = colW || colA;
+    const isEOY = colW.includes('EOY') || colA.includes('EOY') || (sheetRowNumber > 5 && !colW && netWorthVal > 0 && dollarChg !== 0);
     const hasBalances = netWorthVal !== 0 || dollarChg !== 0;
 
     if (!monthLabel && !hasBalances) return;
@@ -108,28 +109,30 @@ export const fetchRothEntries = async (): Promise<RothResponse> => {
     };
   }
 
-  // Parse KPI Block (Rows 2-4, Cols O:T -> Array indices 14:19)
+  // Parse KPI Block (Rows 2-4, Cols O:U -> Array indices 15:20)
+  // Note: When a new column is added, this needs updating
   const kpis: RothKpiData = {
-    vamshiContributions: parseCurrency(rawRows[1]?.[15]),
-    priyaContributions: parseCurrency(rawRows[1]?.[16]),
-    totalContributions: parseCurrency(rawRows[1]?.[19]),
-    vamshiPnlDollar: parseCurrency(rawRows[2]?.[15]),
-    priyaPnlDollar: parseCurrency(rawRows[2]?.[16]),
-    totalPnlDollar: parseCurrency(rawRows[2]?.[19]),
-    vamshiPnlPercent: rawRows[3]?.[15] || '0%',
-    priyaPnlPercent: rawRows[3]?.[16] || '0%',
-    totalPnlPercent: rawRows[3]?.[19] || '0%',
+    vamshiContributions: parseCurrency(rawRows[1]?.[16]),
+    priyaContributions: parseCurrency(rawRows[1]?.[17]),
+    totalContributions: parseCurrency(rawRows[1]?.[20]),
+    vamshiPnlDollar: parseCurrency(rawRows[2]?.[16]),
+    priyaPnlDollar: parseCurrency(rawRows[2]?.[17]),
+    totalPnlDollar: parseCurrency(rawRows[2]?.[20]),
+    vamshiPnlPercent: rawRows[3]?.[16] || '0%',
+    priyaPnlPercent: rawRows[3]?.[17] || '0%',
+    totalPnlPercent: rawRows[3]?.[20] || '0%',
   };
 
   let currentYear = 2025;
   const parsedRows: RothRow[] = [];
 
+  // Note: When a new column is added, this needs updating
   rawRows.forEach((row, index) => {
     const sheetRowNumber = index + 1;
     if (sheetRowNumber < 6) return; // Skip KPI header block
 
-    const colA = row[0] ? row[0].trim() : '';   // Column A: Month name or Year marker
-    const colO = row[14] ? row[14].trim() : ''; // Column O: "Contributions", "EoY balance:", or empty
+    const colA = row[0] ? row[0].trim() : '';
+    const colO = row[15] ? row[15].trim() : '';
 
     // Ignore manual update notes
     if (colA.toLowerCase().includes('manually updated') || colO.toLowerCase().includes('manually updated')) {
@@ -148,12 +151,13 @@ export const fetchRothEntries = async (): Promise<RothResponse> => {
     // Prioritize Column O label if present ("Contributions", "EoY balance:"), otherwise use Column A month name
     const monthOrLabel = colO || colA;
 
-    // Parse financial values (Cols P through T -> Array indices 15 through 19)
-    const vamshiVal = parseCurrency(row[15]);
-    const priyaVal = parseCurrency(row[16]);
-    const dollarChg = parseCurrency(row[17]);
-    const percentChg = row[18] || '';
-    const rothBothVal = parseCurrency(row[19]);
+    // Parse financial values (Cols Q through U -> Array indices 16 through 20)
+    // Note: When a new column is added, this needs updating
+    const vamshiVal = parseCurrency(row[16]);
+    const priyaVal = parseCurrency(row[17]);
+    const dollarChg = parseCurrency(row[18]);
+    const percentChg = row[19] || '';
+    const rothBothVal = parseCurrency(row[20]);
 
     const hasBalances = vamshiVal !== 0 || priyaVal !== 0 || rothBothVal !== 0 || dollarChg !== 0;
 
@@ -206,6 +210,7 @@ export const fetchSavingsEntries = async (): Promise<SavingsRow[]> => {
     savings: getColIndex('Savings'),
     vamshiBofa: getColIndex('Vamshi BoFA'),
     vamshiDcu: getColIndex('Vamshi DCU'),
+    vamshiHood: getColIndex('Vamshi Hood'),
     priyaBofa: getColIndex('Priya BoFA'),
     priyaEtrade: getColIndex('Priya E-Trade'),
     cash: getColIndex('Cash'),
@@ -250,6 +255,7 @@ export const fetchSavingsEntries = async (): Promise<SavingsRow[]> => {
       savings: parseCurrency(row[idx.savings]),
       vamshiBofa: parseCurrency(row[idx.vamshiBofa]),
       vamshiDcu: parseCurrency(row[idx.vamshiDcu]),
+      vamshiHood: parseCurrency(row[idx.vamshiHood]),
       priyaBofa: parseCurrency(row[idx.priyaBofa]),
       priyaEtrade: parseCurrency(row[idx.priyaEtrade]),
       cash: parseCurrency(row[idx.cash]),

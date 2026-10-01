@@ -63,6 +63,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                     const liquidCash =
                         latestSavings.vamshiBofa +
                         latestSavings.vamshiDcu +
+                        latestSavings.vamshiHood +
                         latestSavings.priyaBofa +
                         latestSavings.priyaEtrade +
                         latestSavings.cash;

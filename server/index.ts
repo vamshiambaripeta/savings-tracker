@@ -38,12 +38,13 @@ const auth = new google.auth.GoogleAuth({
 
 const sheets = google.sheets({ version: 'v4', auth });
 
-// GET: fetch savings rows (Columns A:M)
+// GET: fetch savings rows (Columns A:N)
+// Note: When a new column is added, this needs updating
 app.get('/api/savings', async (req: Request, res: Response) => {
   try {
     const response = await sheets.spreadsheets.values.get({
       spreadsheetId: SPREADSHEET_ID,
-      range: 'Numbers!A:M'
+      range: 'Numbers!A:N'
     });
 
     const rows = response.data.values || [];
@@ -53,12 +54,13 @@ app.get('/api/savings', async (req: Request, res: Response) => {
   }
 });
 
-// GET: fetch Roth IRA rows (Columns O:T)
+// GET: fetch Roth IRA rows (Columns O:U)
+// Note: When a new column is added, this needs updating
 app.get('/api/roth', async (req: Request, res: Response) => {
   try {
     const response = await sheets.spreadsheets.values.get({
       spreadsheetId: SPREADSHEET_ID,
-      range: 'Numbers!A:T', // Extended to include Column A for month labels
+      range: 'Numbers!A:U', // Extended to include Column A for month labels
     });
 
     const rows = response.data.values || [];
@@ -69,11 +71,12 @@ app.get('/api/roth', async (req: Request, res: Response) => {
 });
 
 // GET: fetch Net Worth data (Columns A:AA)
+// Note: When a new column is added, this needs updating
 app.get('/api/net-worth', async (req: Request, res: Response) => {
   try {
     const response = await sheets.spreadsheets.values.get({
       spreadsheetId: SPREADSHEET_ID,
-      range: 'Numbers!A:AA', // Extended to include Column A for month/year labels and columns V:AA for Net Worth data
+      range: 'Numbers!A:AB', // Extended to include Column A for month/year labels and Net Worth data
     });
 
     const rows = response.data.values || [];

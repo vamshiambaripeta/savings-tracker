@@ -139,6 +139,7 @@ export default function SavingsPage() {
                             {(
                                 latestActiveRow.vamshiBofa +
                                 latestActiveRow.vamshiDcu +
+                                latestActiveRow.vamshiHood +
                                 latestActiveRow.priyaBofa +
                                 latestActiveRow.priyaEtrade +
                                 latestActiveRow.cash
@@ -269,6 +270,7 @@ export default function SavingsPage() {
                                             <th className="p-3 text-center">Month</th>
                                             <th className="p-3 text-center">Vamshi BoFA</th>
                                             <th className="p-3 text-center">Vamshi DCU</th>
+                                            <th className="p-3 text-center">Vamshi Hood</th>
                                             <th className="p-3 text-center">Priya BoFA</th>
                                             <th className="p-3 text-center">Priya E-Trade</th>
                                             <th className="p-3 text-center">Cash</th>
@@ -295,6 +297,7 @@ export default function SavingsPage() {
                                                 <td className="p-3 text-center font-medium">{row.monthOrLabel}</td>
                                                 <td className="p-3 text-center">{formatCurrencyCell(row.vamshiBofa)}</td>
                                                 <td className="p-3 text-center">{formatCurrencyCell(row.vamshiDcu)}</td>
+                                                <td className="p-3 text-center">{formatCurrencyCell(row.vamshiHood)}</td>
                                                 <td className="p-3 text-center">{formatCurrencyCell(row.priyaBofa)}</td>
                                                 <td className="p-3 text-center">{formatCurrencyCell(row.priyaEtrade)}</td>
                                                 <td className="p-3 text-center">{formatCurrencyCell(row.cash)}</td>

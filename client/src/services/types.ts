@@ -19,6 +19,7 @@ export interface SavingsRow {
   savings: number;
   vamshiBofa: number;
   vamshiDcu: number;
+  vamshiHood: number;
   priyaBofa: number;
   priyaEtrade: number;
   cash: number;

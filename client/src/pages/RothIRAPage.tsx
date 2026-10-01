@@ -122,7 +122,7 @@ export default function RothIRAPage() {
                     Roth IRA Tracker
                 </h1>
                 <p className="text-slate-400 text-sm mt-1">
-                    Connected live to Google Sheets ("Numbers" Tab — O:T Columns)
+                    Connected live to Google Sheets ("Numbers" Tab — O:U Columns)
                 </p>
             </header>
 
